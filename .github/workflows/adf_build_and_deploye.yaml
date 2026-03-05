@@ -17,6 +17,7 @@ jobs:
         
         - name: Check Node js and Npm version
           run: |
-            echo "Node Version: ${node -v}"
+            echo "Node Version:"
+            node -v
             echo "Npm Version:"
             npm -v
