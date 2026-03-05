@@ -18,7 +18,8 @@ jobs:
             node-version: '12.x'
         
         - name: validate node manager
-          run: npm install 
+          run: npm install
+          working-directory: ${{ github.workspace}}/ADFRoot/build
         
         - name: Check Node js and Npm version
           run: |
@@ -26,6 +27,8 @@ jobs:
             node -v
             echo "Npm Version:"
             npm -v
+            ls
+          working-directory: ${{ github.workspace}}/ADFRoot/build
        
 
         - name: validate adf
