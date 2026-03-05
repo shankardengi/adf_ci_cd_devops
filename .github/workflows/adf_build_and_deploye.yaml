@@ -8,14 +8,15 @@ jobs:
     build-and-deploy:
       runs-on: ubuntu-latest
       steps:
-        - name: Setup Node JS
-          uses: actions/setup-node@v4
-          with:
-            node-version: '12.x'
         - name: chekcing NPM version before installing
           run: |
             echo "Npm Version:"
             npm -v
+        - name: Setup Node JS
+          uses: actions/setup-node@v4
+          with:
+            node-version: '12.x'
+        
         - name: validate node manager
           run: npm install 
         
