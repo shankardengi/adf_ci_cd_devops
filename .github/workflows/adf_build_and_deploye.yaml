@@ -8,8 +8,10 @@ jobs:
     build-and-deploy:
       runs-on: ubuntu-latest
       steps:
-        - name: chekcing NPM version before installing
+        - name: Check Node js and Npm version Before Setup
           run: |
+            echo "Node Version:"
+            node -v
             echo "Npm Version:"
             npm -v
         - name: Setup Node JS
