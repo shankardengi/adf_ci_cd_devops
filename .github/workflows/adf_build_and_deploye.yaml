@@ -32,7 +32,7 @@ jobs:
         - name: check package.json
           run: |
             ls node_modules/@microsoft/azure-data-factory-utilities/
-          working-directory: ${{ github.workspace}}/ADFRoot/build
+          working-directory: ${{ github.workspace}}/ADFRoot/build/lib/
        
 
         - name: validate adf
