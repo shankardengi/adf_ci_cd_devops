@@ -29,6 +29,10 @@ jobs:
             npm -v
             ls
           working-directory: ${{ github.workspace}}/ADFRoot/build
+        - name: check package.json
+          run: |
+            ls node_modules/@microsoft/azure-data-factory-utilities/lib/index
+          working-directory: ${{ github.workspace}}/ADFRoot/build
        
 
         - name: validate adf
