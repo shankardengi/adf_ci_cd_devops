@@ -31,8 +31,8 @@ jobs:
           working-directory: ${{ github.workspace}}/ADFRoot/build
         - name: check package.json
           run: |
-            ls node_modules/@microsoft/azure-data-factory-utilities/
-          working-directory: ${{ github.workspace}}/ADFRoot/build/lib/
+            ls node_modules/@microsoft/azure-data-factory-utilities/lib/
+          working-directory: ${{ github.workspace}}/ADFRoot/build
        
 
         - name: validate adf
