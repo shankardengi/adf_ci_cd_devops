@@ -12,6 +12,10 @@ jobs:
           uses: actions/setup-node@v4
           with:
             node-version: '12.x'
+        - name: chekcing NPM version before installing
+          run: |
+            echo "Npm Version:"
+            npm -v
         - name: validate node manager
           run: npm install 
         
