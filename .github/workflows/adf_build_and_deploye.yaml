@@ -34,3 +34,13 @@ jobs:
         - name: validate adf
           run: npm run build validate ${{ github.workspace }}/ADFRoot/ /subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID}}/resourceGroups/${{ secrets.AZURE_RESOURCE_GROUP }}/providers/Microsoft.DataFactory/factories/${{ secrets.AZURE_DATA_FACTORY_NAME}}
           working-directory: ${{ github.workspace}}/ADFRoot/build
+
+        - name: genrate ARM Template
+          run: npm run build export ${{ github.workspace }}/ADFRoot/ /subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID}}/resourceGroups/${{ secrets.AZURE_RESOURCE_GROUP }}/providers/Microsoft.DataFactory/factories/${{ secrets.AZURE_DATA_FACTORY_NAME}} "Exported_ARM_Template"
+          working-directory: ${{ github.workspace}}/ADFRoot/build
+
+        - name: Upload ARM Template as artifact
+          uses: actions/upload-artifact@v3
+          with:
+            name: arm-template
+            path: ${{ github.workspace }}/ADFRoot/build/Exported_ARM_Template
