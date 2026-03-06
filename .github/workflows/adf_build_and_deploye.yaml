@@ -167,7 +167,7 @@ jobs:
 
         - name: what if ARM Template deployment
           run: |
-            az deployment group create |
+            az deployment group create \
                 --resource-group ${{ secrets.AZURE_PROD_RESOURCE_GROUP}} \
                 --template-file ./build/Exported_ARM_Template/ARMTemplateForFactory.json \
                 --parameters ./build/config/ARMTemplateParametersForFactory_prod.jsonc \
@@ -176,7 +176,7 @@ jobs:
 
         - name: deploy Arm Template Prod
           run: |
-            az deployment group create |
+            az deployment group create \
                 --resource-group ${{ secrets.AZURE_PROD_RESOURCE_GROUP}} \
                 --template-file ./build/Exported_ARM_Template/ARMTemplateForFactory.json \
                 --parameters ./build/config/ARMTemplateParametersForFactory_prod.jsonc \
