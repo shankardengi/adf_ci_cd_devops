@@ -45,11 +45,16 @@ jobs:
           run: npm run build export ${{ github.workspace }}/ADFRoot/ /subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID}}/resourceGroups/${{ secrets.AZURE_RESOURCE_GROUP }}/providers/Microsoft.DataFactory/factories/${{ secrets.AZURE_DATA_FACTORY_NAME}} "Exported_ARM_Template"
           working-directory: ${{ github.workspace}}/ADFRoot/build
 
+        - name: copy parameters file
+          run: |
+            mkdir -p {{ github.workspace}}/ADFRoot/build/config
+            cp ${{ github.workspace }}/ADFRoot/config/* ${{ github.workspace }}/ADFRoot/build/config/
+
         - name: Upload ARM Template as artifact
           uses: actions/upload-artifact@v4
           with:
-            name: arm-template
-            path: ${{ github.workspace }}/ADFRoot/build/Exported_ARM_Template
+            name: build
+            path: ${{ github.workspace }}/ADFRoot/build
     what-if-deploy:
       runs-on: ubuntu-latest
       needs: build
@@ -57,18 +62,25 @@ jobs:
         - name: Download ARM Template artifact
           uses: actions/download-artifact@v4
           with:
-            name: arm-template
-            path: ./arm-template
+            name: build
+            path: ./build
         - name: show downloaded files
-          run: tree ./arm-template
+          run: tree ./build
         - name: display template file
-          run: cat ./arm-template/ARMTemplateForFactory.json
+          run: cat ./build/Exported_ARM_Template/ARMTemplateForFactory.json
         - name: Azure Login
           uses: azure/login@v2
           with:
             client-id: ${{ secrets.AZURE_CLIENT_ID }}
             tenant-id: ${{ secrets.AZURE_TENANT_ID }}
             subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID}}
+        - name: validate ARM Template
+          run: |
+            az deployment group validate 
+                --resource-group ${{ secrets.AZURE_RESOURCE_GROUP}}
+                --template-file ./build/Exported_ARM_Template/ARMTemplateForFactory.json
+                --parameters ./build/config/ARMTemplateParametersForFactory_dev.jsonc
+                --mode incremental
         
 
         
