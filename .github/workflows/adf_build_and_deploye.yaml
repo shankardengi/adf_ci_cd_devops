@@ -47,7 +47,7 @@ jobs:
 
         - name: copy parameters file
           run: |
-            mkdir -p {{ github.workspace}}/ADFRoot/build/config
+            mkdir -p ${{ github.workspace}}/ADFRoot/build/config
             cp ${{ github.workspace }}/ADFRoot/config/* ${{ github.workspace }}/ADFRoot/build/config/
 
         - name: Upload ARM Template as artifact
