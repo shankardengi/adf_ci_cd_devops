@@ -61,7 +61,7 @@ jobs:
         - name: show downloaded files
           run: tree ./arm-template
         - name: display template file
-          run: cat ./arm-template/Exported_ARM_Template/ARMTemplateForFactory.json
+          run: cat ./arm-template/ARMTemplateForFactory.json
         - name: Azure Login
           uses: azure/login@v2
           with:
