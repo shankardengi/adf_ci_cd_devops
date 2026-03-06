@@ -9,7 +9,7 @@
            This section contains the configuration for the factory name.
         */
         "factoryName": {
-            "value": "adfcicddevshankar"
+            "value": "adfcicdtestshankar"
         },
         /* ======================================================================================
            ADF CI/CD - CONFIGURATION
