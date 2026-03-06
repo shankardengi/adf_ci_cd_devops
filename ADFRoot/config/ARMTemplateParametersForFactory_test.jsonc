@@ -1,0 +1,27 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        /* ======================================================================================
+           ADF CI/CD - CONFIGURATION
+           FACTORY NAME
+           ======================================================================================  
+           This section contains the configuration for the factory name.
+        */
+        "factoryName": {
+            "value": "adfcicddevshankar"
+        },
+        /* ======================================================================================
+           ADF CI/CD - CONFIGURATION
+           LINKED SERVICE - Key Vault Data
+           ======================================================================================  
+           This section contains the configuration for the Key Vault linked service.
+        */
+        "ls_kv_properties_typeProperties_baseUrl": {
+            "value": "https://kvcicdtestshankar.vault.azure.net/"
+        },
+        "ls_sa_properties_typeProperties_url": {
+            "value": "https://sacicdtestshankar.dfs.core.windows.net"
+        }
+    }
+}
