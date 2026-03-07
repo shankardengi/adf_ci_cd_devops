@@ -15,7 +15,7 @@ jobs:
         AZURE_RESOURCE_GROUP: ${{ secrets.AZURE_RESOURCE_GROUP }}
         AZURE_DATA_FACTORY_NAME: ${{ secrets.AZURE_DATA_FACTORY_NAME }}
     whatif-dev:
-      uses: ./.github/workflows/whatif.yaml
+      uses: ./.github/workflows/whatif.yml
       needs: build
       secrets:
         AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
