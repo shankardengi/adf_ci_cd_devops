@@ -1,6 +1,16 @@
 name: ADF Build and Genreate ARM Template
 on:
   workflow_call:
+    secrets:
+      AZURE_SUBSCRIPTION_ID:
+        description: 'Azure Subscription ID'
+        required: true
+      AZURE_RESOURCE_GROUP:
+        description: 'Azure Resource Group Name'
+        required: true
+      AZURE_DATA_FACTORY_NAME:
+        description: 'Azure Data Factory Name'
+        required: true
 jobs:
   build:
     runs-on: ubuntu-latest
