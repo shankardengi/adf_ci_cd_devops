@@ -1,6 +1,11 @@
-name: ADF What If Deployment
+name: Deploy ADF ARM Template
 on:
   workflow_call:
+    inputs: 
+      env:
+        description: 'Environment for deployment'
+        type: string
+        required: true
     secrets:
       AZURE_SUBSCRIPTION_ID:
         description: 'Azure Subscription ID'
@@ -13,14 +18,8 @@ on:
         required: true
       AZURE_TENANT_ID:
         description: 'Azure Tenant ID'
-        required: true
-    inputs:
-      env: 
-        description: 'Environment for deployment'
-        type: string
-        required: true
 jobs:
-  whatif-deploy:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Download ARM Template artifact
@@ -28,9 +27,11 @@ jobs:
         with:
           name: build
           path: ./build
-      - name: show downloaded files
+
+      - name: show downloaded files 
         run: tree ./build
-      - name: azure login
+
+      - name: Azure Login
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
@@ -41,13 +42,13 @@ jobs:
           az deployment group validate \
           --resource-group ${{ secrets.AZURE_RESOURCE_GROUP}} \
             --template-file ./build/Exported_ARM_Template/ARMTemplateForFactory.json \
-            --parameters ./build/config/ARMTemplateParametersForFactory_${{ inputs.env }}.jsonc \
+            --parameters ./build/config/ARMTemplateParametersForFactory_${{ inputs.env }}.jsonc  \
             --mode incremental
-      - name: what if ARM Template deployment
+
+      - name: deploy Arm Template
         run: |
-            az deployment group create \
-            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP}} \
-            --template-file ./build/Exported_ARM_Template/ARMTemplateForFactory.json \
-            --parameters ./build/config/ARMTemplateParametersForFactory_${{ inputs.env }}.jsonc \
-            --mode incremental \
-            --what-if
+          az deployment group create \
+          --resource-group ${{ secrets.AZURE_RESOURCE_GROUP}} \
+          --template-file ./build/Exported_ARM_Template/ARMTemplateForFactory.json \
+          --parameters ./build/config/ARMTemplateParametersForFactory_${{ inputs.env }}.jsonc \
+          --mode incremental
