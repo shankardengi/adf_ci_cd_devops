@@ -15,6 +15,7 @@ jobs:
       
       - name: install node manager
         run: npm install
+        working-directory: ${{ github.workspace}}/ADFRoot/build
 
       - name: Check Node js and Npm version
         run: |
