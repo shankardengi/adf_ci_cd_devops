@@ -8,60 +8,20 @@ permissions:
   id-token: write
   contents: read
 jobs:
-    build-using-workflow:
+    build:
       uses: ./.github/workflows/build.yaml
       secrets:
         AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         AZURE_RESOURCE_GROUP: ${{ secrets.AZURE_RESOURCE_GROUP }}
         AZURE_DATA_FACTORY_NAME: ${{ secrets.AZURE_DATA_FACTORY_NAME }}
-        
-    build:
-      runs-on: ubuntu-latest
-      steps:
-        - name: checkout code
-          uses: actions/checkout@v4
-
-        - name: Setup Node JS
-          uses: actions/setup-node@v4
-          with:
-            node-version: '18.x'
-        
-        - name: validate node manager
-          run: npm install
-          working-directory: ${{ github.workspace}}/ADFRoot/build
-        
-        - name: Check Node js and Npm version
-          run: |
-            echo "Node Version:"
-            node -v
-            echo "Npm Version:"
-            npm -v
-            ls
-          working-directory: ${{ github.workspace}}/ADFRoot/build
-        - name: check package.json
-          run: |
-            cat node_modules/@microsoft/azure-data-factory-utilities/lib/index.js
-          working-directory: ${{ github.workspace}}/ADFRoot/build
-       
-
-        - name: validate adf
-          run: npm run build validate ${{ github.workspace }}/ADFRoot/ /subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID}}/resourceGroups/${{ secrets.AZURE_RESOURCE_GROUP }}/providers/Microsoft.DataFactory/factories/${{ secrets.AZURE_DATA_FACTORY_NAME}}
-          working-directory: ${{ github.workspace}}/ADFRoot/build
-
-        - name: genrate ARM Template
-          run: npm run build export ${{ github.workspace }}/ADFRoot/ /subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID}}/resourceGroups/${{ secrets.AZURE_RESOURCE_GROUP }}/providers/Microsoft.DataFactory/factories/${{ secrets.AZURE_DATA_FACTORY_NAME}} "Exported_ARM_Template"
-          working-directory: ${{ github.workspace}}/ADFRoot/build
-
-        - name: copy parameters file
-          run: |
-            mkdir -p ${{ github.workspace}}/ADFRoot/build/config
-            cp ${{ github.workspace }}/ADFRoot/config/* ${{ github.workspace }}/ADFRoot/build/config/
-
-        - name: Upload ARM Template as artifact
-          uses: actions/upload-artifact@v4
-          with:
-            name: build
-            path: ${{ github.workspace }}/ADFRoot/build
+    whatif-dev:
+      uses: ./.github/workflows/whatif.yaml
+      needs: build
+      secrets:
+        AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        AZURE_RESOURCE_GROUP: ${{ secrets.AZURE_RESOURCE_GROUP }}
+        AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+        AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
     deploy-dev:
       runs-on: ubuntu-latest
       needs: build
