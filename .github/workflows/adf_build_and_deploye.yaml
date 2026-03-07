@@ -22,132 +22,132 @@ jobs:
         AZURE_RESOURCE_GROUP: ${{ secrets.AZURE_RESOURCE_GROUP }}
         AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
         AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-    deploy-dev:
-      runs-on: ubuntu-latest
-      needs: build
-      steps:
-        - name: Download ARM Template artifact
-          uses: actions/download-artifact@v4
-          with:
-            name: build
-            path: ./build
-        - name: show downloaded files
-          run: tree ./build
-        - name: display template file
-          run: cat ./build/Exported_ARM_Template/ARMTemplateForFactory.json
-        - name: Azure Login
-          uses: azure/login@v2
-          with:
-            client-id: ${{ secrets.AZURE_CLIENT_ID }}
-            tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-            subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID}}
-        - name: validate ARM Template
-          run: |
-            az deployment group validate \
-                --resource-group ${{ secrets.AZURE_RESOURCE_GROUP}} \
-                --template-file ./build/Exported_ARM_Template/ARMTemplateForFactory.json \
-                --parameters ./build/config/ARMTemplateParametersForFactory_dev.jsonc  \
-                --mode incremental
-        - name: what if ARM Template deployment
-          run: |
-            az deployment group create \
-                --resource-group ${{ secrets.AZURE_RESOURCE_GROUP}} \
-                --template-file ./build/Exported_ARM_Template/ARMTemplateForFactory.json \
-                --parameters ./build/config/ARMTemplateParametersForFactory_dev.jsonc \
-                --mode incremental \
-                --what-if
+    # deploy-dev:
+    #   runs-on: ubuntu-latest
+    #   needs: build
+    #   steps:
+    #     - name: Download ARM Template artifact
+    #       uses: actions/download-artifact@v4
+    #       with:
+    #         name: build
+    #         path: ./build
+    #     - name: show downloaded files
+    #       run: tree ./build
+    #     - name: display template file
+    #       run: cat ./build/Exported_ARM_Template/ARMTemplateForFactory.json
+    #     - name: Azure Login
+    #       uses: azure/login@v2
+    #       with:
+    #         client-id: ${{ secrets.AZURE_CLIENT_ID }}
+    #         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+    #         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID}}
+    #     - name: validate ARM Template
+    #       run: |
+    #         az deployment group validate \
+    #             --resource-group ${{ secrets.AZURE_RESOURCE_GROUP}} \
+    #             --template-file ./build/Exported_ARM_Template/ARMTemplateForFactory.json \
+    #             --parameters ./build/config/ARMTemplateParametersForFactory_dev.jsonc  \
+    #             --mode incremental
+    #     - name: what if ARM Template deployment
+    #       run: |
+    #         az deployment group create \
+    #             --resource-group ${{ secrets.AZURE_RESOURCE_GROUP}} \
+    #             --template-file ./build/Exported_ARM_Template/ARMTemplateForFactory.json \
+    #             --parameters ./build/config/ARMTemplateParametersForFactory_dev.jsonc \
+    #             --mode incremental \
+    #             --what-if
 
-        - name: deploy Arm Template Dev
-          run: |
-            az deployment group create \
-                --resource-group ${{secrets.AZURE_RESOURCE_GROUP}} \
-                --template-file ./build/Exported_ARM_Template/ARMTemplateForFactory.json \
-                --parameters ./build/config/ARMTemplateParametersForFactory_dev.jsonc \
-                --mode incremental
+    #     - name: deploy Arm Template Dev
+    #       run: |
+    #         az deployment group create \
+    #             --resource-group ${{secrets.AZURE_RESOURCE_GROUP}} \
+    #             --template-file ./build/Exported_ARM_Template/ARMTemplateForFactory.json \
+    #             --parameters ./build/config/ARMTemplateParametersForFactory_dev.jsonc \
+    #             --mode incremental
 
-    deploy-test:
-        runs-on: ubuntu-latest
-        needs: build
-        steps:
-        - name: Download ARM Template artifact
-          uses: actions/download-artifact@v4
-          with:
-            name: build
-            path: ./build
-        - name: show downloaded files
-          run: tree ./build
-        - name: Azure Login
-          uses: azure/login@v2
-          with:
-            client-id: ${{ secrets.AZURE_CLIENT_ID }}
-            tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-            subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID}}
-        - name: validate ARM Template
-          run: |
-            az deployment group validate \
-                --resource-group ${{ secrets.AZURE_TEST_RESOURCE_GROUP}} \
-                --template-file ./build/Exported_ARM_Template/ARMTemplateForFactory.json \
-                --parameters ./build/config/ARMTemplateParametersForFactory_test.jsonc  \
-                --mode incremental
-        - name: what if ARM Template deployment
-          run: |
-            az deployment group create \
-                --resource-group ${{ secrets.AZURE_TEST_RESOURCE_GROUP}} \
-                --template-file ./build/Exported_ARM_Template/ARMTemplateForFactory.json \
-                --parameters ./build/config/ARMTemplateParametersForFactory_test.jsonc \
-                --mode incremental \
-                --what-if
-        - name: deploy Arm Template Test
-          run: |
-            az deployment group create \
-                --resource-group ${{ secrets.AZURE_TEST_RESOURCE_GROUP}} \
-                --template-file ./build/Exported_ARM_Template/ARMTemplateForFactory.json \
-                --parameters ./build/config/ARMTemplateParametersForFactory_test.jsonc \
-                --mode incremental
+    # deploy-test:
+    #     runs-on: ubuntu-latest
+    #     needs: build
+    #     steps:
+    #     - name: Download ARM Template artifact
+    #       uses: actions/download-artifact@v4
+    #       with:
+    #         name: build
+    #         path: ./build
+    #     - name: show downloaded files
+    #       run: tree ./build
+    #     - name: Azure Login
+    #       uses: azure/login@v2
+    #       with:
+    #         client-id: ${{ secrets.AZURE_CLIENT_ID }}
+    #         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+    #         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID}}
+    #     - name: validate ARM Template
+    #       run: |
+    #         az deployment group validate \
+    #             --resource-group ${{ secrets.AZURE_TEST_RESOURCE_GROUP}} \
+    #             --template-file ./build/Exported_ARM_Template/ARMTemplateForFactory.json \
+    #             --parameters ./build/config/ARMTemplateParametersForFactory_test.jsonc  \
+    #             --mode incremental
+    #     - name: what if ARM Template deployment
+    #       run: |
+    #         az deployment group create \
+    #             --resource-group ${{ secrets.AZURE_TEST_RESOURCE_GROUP}} \
+    #             --template-file ./build/Exported_ARM_Template/ARMTemplateForFactory.json \
+    #             --parameters ./build/config/ARMTemplateParametersForFactory_test.jsonc \
+    #             --mode incremental \
+    #             --what-if
+    #     - name: deploy Arm Template Test
+    #       run: |
+    #         az deployment group create \
+    #             --resource-group ${{ secrets.AZURE_TEST_RESOURCE_GROUP}} \
+    #             --template-file ./build/Exported_ARM_Template/ARMTemplateForFactory.json \
+    #             --parameters ./build/config/ARMTemplateParametersForFactory_test.jsonc \
+    #             --mode incremental
 
-    deploy-prod:
-      runs-on: ubuntu-latest
-      needs: build
-      steps:
-        - name: Download ARM Template artifact
-          uses: actions/download-artifact@v4
-          with:
-            name: build
-            path: ./build
-        - name: show downloaded files
-          run: tree ./build
+    # deploy-prod:
+    #   runs-on: ubuntu-latest
+    #   needs: build
+    #   steps:
+    #     - name: Download ARM Template artifact
+    #       uses: actions/download-artifact@v4
+    #       with:
+    #         name: build
+    #         path: ./build
+    #     - name: show downloaded files
+    #       run: tree ./build
 
-        - name: Azure Login
-          uses: azure/login@v2
-          with:
-            client-id: ${{ secrets.AZURE_CLIENT_ID }}
-            tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-            subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID}}
+    #     - name: Azure Login
+    #       uses: azure/login@v2
+    #       with:
+    #         client-id: ${{ secrets.AZURE_CLIENT_ID }}
+    #         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+    #         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID}}
         
-        - name: validate ARM Template
-          run: |
-            az deployment group validate \
-                --resource-group ${{ secrets.AZURE_PROD_RESOURCE_GROUP}} \
-                --template-file ./build/Exported_ARM_Template/ARMTemplateForFactory.json \
-                --parameters ./build/config/ARMTemplateParametersForFactory_prod.jsonc  \
-                --mode incremental
+    #     - name: validate ARM Template
+    #       run: |
+    #         az deployment group validate \
+    #             --resource-group ${{ secrets.AZURE_PROD_RESOURCE_GROUP}} \
+    #             --template-file ./build/Exported_ARM_Template/ARMTemplateForFactory.json \
+    #             --parameters ./build/config/ARMTemplateParametersForFactory_prod.jsonc  \
+    #             --mode incremental
 
-        - name: what if ARM Template deployment
-          run: |
-            az deployment group create \
-                --resource-group ${{ secrets.AZURE_PROD_RESOURCE_GROUP}} \
-                --template-file ./build/Exported_ARM_Template/ARMTemplateForFactory.json \
-                --parameters ./build/config/ARMTemplateParametersForFactory_prod.jsonc \
-                --mode incremental \
-                --what-if
+    #     - name: what if ARM Template deployment
+    #       run: |
+    #         az deployment group create \
+    #             --resource-group ${{ secrets.AZURE_PROD_RESOURCE_GROUP}} \
+    #             --template-file ./build/Exported_ARM_Template/ARMTemplateForFactory.json \
+    #             --parameters ./build/config/ARMTemplateParametersForFactory_prod.jsonc \
+    #             --mode incremental \
+    #             --what-if
 
-        - name: deploy Arm Template Prod
-          run: |
-            az deployment group create \
-                --resource-group ${{ secrets.AZURE_PROD_RESOURCE_GROUP}} \
-                --template-file ./build/Exported_ARM_Template/ARMTemplateForFactory.json \
-                --parameters ./build/config/ARMTemplateParametersForFactory_prod.jsonc \
-                --mode incremental
+    #     - name: deploy Arm Template Prod
+    #       run: |
+    #         az deployment group create \
+    #             --resource-group ${{ secrets.AZURE_PROD_RESOURCE_GROUP}} \
+    #             --template-file ./build/Exported_ARM_Template/ARMTemplateForFactory.json \
+    #             --parameters ./build/config/ARMTemplateParametersForFactory_prod.jsonc \
+    #             --mode incremental
 
 
         
